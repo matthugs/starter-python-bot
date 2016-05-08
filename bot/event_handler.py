@@ -20,7 +20,7 @@ class RtmEventHandler(object):
         if event_type == 'error':
             # error
             self.msg_writer.write_error(event['channel'], json.dumps(event))
-        elif event_type == 'message' and not 'edited' in event:
+        elif event_type == 'message' and not ('edited' in event):
             # message was sent to channel
             self._handle_message(event)
         elif event_type == 'channel_joined':
@@ -34,7 +34,7 @@ class RtmEventHandler(object):
 
     def _handle_message(self, event):
         # Filter out messages from the bot itself
-        if not self.clients.is_message_from_me(event['user']):
+        if ('user' in event) and not self.clients.is_message_from_me(event['user']):
 
             msg_txt = event['text']
 
